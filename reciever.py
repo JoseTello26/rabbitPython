@@ -24,7 +24,7 @@ def main():
             #print('usuario: ' + usuario['correo'])
             #print('pass: ' + usuario['pass'])
             cursor.execute('SELECT correo, pass FROM usuarios')
-            results = conn.fetchall()
+            results = cursor.fetchall()
             if((correo, pwd) in results):
                 print("[x] LOGGED IN")
                 cursor.execute(f'SELECT id, nombre FROM usuarios WHERE correo={correo}')
