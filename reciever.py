@@ -1,6 +1,6 @@
 import pika, sys, os, json
 login=False
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.17.0.2'))
 channel = connection.channel()
 
 channel.queue_declare(queue='user')
