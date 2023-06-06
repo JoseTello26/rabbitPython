@@ -8,7 +8,7 @@ channel.queue_declare(queue='user')
 conn = psycopg2.connect(dbname="tienda",
                         user="postgres",
                         password="postgres",
-                        host="localhost",
+                        host="172.17.0.3",
                         port="5432")
 cursor = conn.cursor()
 
