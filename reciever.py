@@ -27,7 +27,7 @@ def main():
             results = cursor.fetchall()
             if((correo, pwd) in results):
                 print("[x] LOGGED IN")
-                cursor.execute(f'SELECT id, nombre FROM usuarios WHERE correo={correo}')
+                cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo='{correo}'")
                 user=cursor.fetchone()
                 envia_usuario(*user)
                 login = True
