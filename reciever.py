@@ -1,15 +1,15 @@
 import pika, sys, os, json, psycopg2
 login=False
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.17.0.2'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.environ('RABBITMQ_HOST'), port=os.environ('RABBITMQ_PORT')))
 channel = connection.channel()
 
 channel.queue_declare(queue='user')
 
 conn = psycopg2.connect(dbname="tienda",
-                        user="postgres",
-                        password="postgres",
-                        host="172.17.0.3",
-                        port="5432")
+                        user=os.environ('POSTGRES_USER'),
+                        password=os.environ('POSTGRES_PASSWORD'),
+                        host=os.environ('POSTGRES_HOST'),
+                        port=os.environ('POSTGRES_PORT'))
 cursor = conn.cursor()
 
 def main():
@@ -27,7 +27,7 @@ def main():
             results = cursor.fetchall()
             if((correo, pwd) in results):
                 print("[x] LOGGED IN")
-                cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo='{correo}'")
+                cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo = '{correo}' ")
                 user=cursor.fetchone()
                 envia_usuario(*user)
                 login = True
@@ -68,3 +68,4 @@ if __name__ == '__main__':
             sys.exit(0)
         except SystemExit:
             os._exit(0)
+
