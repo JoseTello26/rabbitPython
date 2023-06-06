@@ -1,4 +1,5 @@
 CREATE DATABASE tienda;
+\c tienda;
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255),
