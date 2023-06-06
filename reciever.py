@@ -1,9 +1,16 @@
-import pika, sys, os, json
+import pika, sys, os, json, psycopg2
 login=False
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.17.0.2'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
 
 channel.queue_declare(queue='user')
+
+conn = psycopg2.connect(dbname="tienda",
+                        user="postgres",
+                        password="postgres",
+                        host="localhost",
+                        port="5432")
+cursor = conn.cursor()
 
 def main():
     def callback(ch, method, properties, body):
@@ -12,15 +19,21 @@ def main():
         print(" [x] Received " + contenido)
         usuario = json.loads(str(contenido))
         if(not login): 
-            print('usuario: ' + usuario['correo'])
-            print('pass: ' + usuario['pass'])
-            if(usuario['correo'] != "asdasd@uni.pe" and usuario["pass"]!="asdads123"):
+            correo = usuario['correo']
+            pwd = usuario['pass']
+            #print('usuario: ' + usuario['correo'])
+            #print('pass: ' + usuario['pass'])
+            cursor.execute('SELECT correo, pass FROM usuarios')
+            results = conn.fetchall()
+            if((correo, pwd) in results):
+                print("[x] LOGGED IN")
+                cursor.execute(f'SELECT id, nombre FROM usuarios WHERE correo={correo}')
+                user=cursor.fetchone()
+                envia_usuario(*user)
+                login = True
+            else:
                 print("[X] ERROR DE LOGIN")
                 envia_error(1)
-            else:
-                print("[x] LOGGED IN")
-                envia_usuario("ID01")
-                login = True
     def envia_error(codigo):
         mensaje = {'codigo': codigo}
         mensaje = json.dumps(mensaje)
@@ -28,11 +41,11 @@ def main():
         print(" [x] Sent error")
         #connection.close()
 
-    def envia_usuario(id):
+    def envia_usuario(id, nombre):
         #login=False
         #while(not login):
         
-        mensaje = {'codigo': 0, 'usuario': id}
+        mensaje = {'codigo': 0, 'usuario': {'id': id, 'nombre': nombre}}
         mensaje = json.dumps(mensaje)
         channel.basic_publish(exchange='', routing_key='user', body= mensaje)
         
@@ -55,4 +68,3 @@ if __name__ == '__main__':
             sys.exit(0)
         except SystemExit:
             os._exit(0)
-
