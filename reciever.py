@@ -20,21 +20,38 @@ def main():
         print(" [x] Received " + contenido)
         usuario = json.loads(str(contenido))
         if(not login): 
-            correo = usuario['correo']
-            pwd = usuario['pass']
-            #print('usuario: ' + usuario['correo'])
-            #print('pass: ' + usuario['pass'])
-            cursor.execute('SELECT correo, pass FROM usuarios')
-            results = cursor.fetchall()
-            if((correo, pwd) in results):
-                print("[x] LOGGED IN")
-                cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo = '{correo}' ")
-                user=cursor.fetchone()
-                envia_usuario(*user)
-                login = True
-            else:
-                print("[X] ERROR DE LOGIN")
-                envia_error(1)
+            if usuario["type"]=='login':
+                correo = usuario['email']
+                pwd = usuario['password']
+                #print('usuario: ' + usuario['email'])
+                #print('pass: ' + usuario['password'])
+                cursor.execute('SELECT correo, pass FROM usuarios')
+                results = cursor.fetchall()
+                if((correo, pwd) in results):
+                    print("[x] LOGGED IN")
+                    cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo = '{correo}' ")
+                    user=cursor.fetchone()
+                    envia_usuario(*user)
+                    login = True
+                else:
+                    print("[X] ERROR DE LOGIN")
+                    envia_error(1)
+            elif usuario["type"]=='signup':
+                correo = usuario['email']
+                pwd = usuario['password']
+                nombre = usuario['nombre']
+                cursor.execute('SELECT correo, pass FROM usuarios')
+                results = cursor.fetchall()
+                if((correo, pwd) in results):
+                    print("[X] ERROR DE REGISTRO")
+                    envia_error(1)
+                else:
+                    cursor.execute(f"INSERT INTO usuarios(nombre,correo, pass) VALUES ('{nombre}', '{correo}', '{pwd}')")
+                    print("[x] REGISTRADO USUARIO")
+                    cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo = '{correo}' ")
+                    user=cursor.fetchone()
+                    envia_usuario(*user)
+                    login = True
         else:
             if('codigo' in usuario.keys()):
                 if(usuario['codigo']==9):
