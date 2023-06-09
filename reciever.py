@@ -22,9 +22,9 @@ def main():
         if(not login): 
             if usuario["type"]=='login':
                 correo = usuario['email']
-                pwd = usuario['password']
+                pwd = usuario['pass']
                 #print('usuario: ' + usuario['email'])
-                #print('pass: ' + usuario['password'])
+                #print('pass: ' + usuario['pass'])
                 cursor.execute('SELECT correo, pass FROM usuarios')
                 results = cursor.fetchall()
                 if((correo, pwd) in results):
@@ -38,7 +38,7 @@ def main():
                     envia_error(1)
             elif usuario["type"]=='signup':
                 correo = usuario['email']
-                pwd = usuario['password']
+                pwd = usuario['pass']
                 nombre = usuario['nombre']
                 cursor.execute('SELECT correo, pass FROM usuarios')
                 results = cursor.fetchall()
