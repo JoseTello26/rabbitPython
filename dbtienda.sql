@@ -10,7 +10,8 @@ CREATE TABLE ventas (
     id SERIAL PRIMARY KEY,
     id_usuario INT,
     id_producto INT,
-    cantidad INT
+    cantidad INT,
+    precio FLOAT
 );
 INSERT INTO usuarios (nombre, correo, pass) VALUES
   ('Jake Peralta', 'jake.peralta@example.com', 'password1'),
