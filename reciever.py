@@ -35,7 +35,7 @@ def main():
             else:
                 print("[X] ERROR DE LOGIN")
                 envia_error(1)
-        if(login):
+        else:
             if('codigo' in usuario.keys()):
                 if(usuario['codigo']==9):
                     print("[X] USUARIO CERRO LOGIN "+user[1])
