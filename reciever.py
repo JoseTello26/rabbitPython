@@ -39,7 +39,7 @@ def main():
             elif usuario["type"]=='signup':
                 correo = usuario['email']
                 pwd = usuario['pass']
-                nombre = usuario['nombre']
+                nombre = usuario['email']
                 cursor.execute('SELECT correo, pass FROM usuarios')
                 results = cursor.fetchall()
                 if((correo, pwd) in results):
