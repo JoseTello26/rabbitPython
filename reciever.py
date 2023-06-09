@@ -5,6 +5,7 @@ channel = connection.channel()
 
 channel.queue_declare(queue='js-python')
 channel.queue_declare(queue='python-js')
+channel.queue_declare(queue='python-java')
 
 conn = psycopg2.connect(dbname="tienda",
                         user=os.environ['POSTGRES_USER'],
