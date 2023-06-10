@@ -5,7 +5,6 @@ channel = connection.channel()
 
 channel.queue_declare(queue='js-python')
 channel.queue_declare(queue='python-js')
-channel.queue_declare(queue='python-java')
 
 conn = psycopg2.connect(dbname="tienda",
                         user=os.environ['POSTGRES_USER'],
@@ -47,10 +46,11 @@ def main():
                     print("[X] ERROR DE REGISTRO")
                     envia_error(1)
                 else:
-                    cursor.execute(f"INSERT INTO usuarios(nombre,correo, pass) VALUES ('{nombre}', '{correo}', '{pwd}')")
+                    cursor.execute(f"INSERT INTO usuarios (nombre,correo, pass) VALUES ('{nombre}', '{correo}', '{pwd}')")
                     print("[x] REGISTRADO USUARIO")
                     cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo = '{correo}' ")
                     user=cursor.fetchone()
+                    print(user)
                     envia_usuario(*user)
                     login = True
         else:
