@@ -47,6 +47,7 @@ def main():
                     envia_error(1)
                 else:
                     cursor.execute(f"INSERT INTO usuarios (nombre,correo, pass) VALUES ('{nombre}', '{correo}', '{pwd}')")
+                    conn.commit()
                     print("[x] REGISTRADO USUARIO")
                     cursor.execute(f"SELECT id, nombre FROM usuarios WHERE correo = '{correo}' ")
                     user=cursor.fetchone()
