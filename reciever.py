@@ -62,6 +62,7 @@ def main():
             else:
                 for prod in usuario['productos']:
                     cursor.execute(f"INSERT INTO ventas (id_usuario, id_producto, cantidad, precio) VALUES ({usuario['usuario_ID']},{prod['ID']}, {prod['cantidad']}, {prod['precio']})")
+                cursor.commit()
                 print("[X] COMPRA REGISTRADA")
                 envia_actualizacion_bd(usuario['productos'])
 
